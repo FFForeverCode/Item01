@@ -97,15 +97,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         String password = DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes());
         employee.setPassword(password);
         //设置时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
 
         //设置当前记录创建人的id和修改人的id
         //TODO:后期需要改为当前登录用户的ID
         //TODO:利用ThreadLocal线程 在拦截器阶段 创建token时保存ID,在同一线程获取保存的ID
-        Long ID = BaseContext.getCurrentId();
-        employee.setCreateUser(ID);
-        employee.setUpdateUser(ID);
+        //填充更新时间，更新人代码重复冗余,可以采用AOP面向切面的技术将冗余代码与业务代码分离.
+        //TODO:注解+AOP 类似日志Demo
+//        Long ID = BaseContext.getCurrentId();
+//        employee.setCreateUser(ID);
+//        employee.setUpdateUser(ID);
 
         //执行DAO(Mapper)层操作数据库
         employeeMapper.InsertEmployee(employee);
@@ -153,8 +155,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void modifyEmployee(@RequestBody EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO,employee);
-        employee.setUpdateUser(BaseContext.getCurrentId());
-        employee.setUpdateTime(LocalDateTime.now());
+        //TODO:AOP实现公共字段填充
+//        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setUpdateTime(LocalDateTime.now());
         employeeMapper.update(employee);
     }
 

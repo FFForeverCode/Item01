@@ -28,7 +28,22 @@
             sort = #{sort},
         </if>
         <if test="type != null">
-            type = #{type}
+            type = #{type},
+        </if>
+        <if test="createTime!=null">
+            create_time = #{createTime},
+        </if>
+        <if test="createUser!=null">
+            create_user = #{createUser},
+        </if>
+        <if test="updateUser!=null">
+            update_user = #{updateUser},
+        </if>
+        <if test="updateTime!=null">
+            update_time = #{updateTime},
+        </if>
+        <if test="status!=null">
+            status = #{status}
         </if>
         </set>
     <where>

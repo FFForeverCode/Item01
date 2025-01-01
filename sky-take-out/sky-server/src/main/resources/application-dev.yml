@@ -1,3 +1,4 @@
+#开发环境配置文件
 sky:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -5,4 +6,11 @@ sky:
     port: 3306
     database: sky_take_out
     username: root
-    password: 13939343840ww
+    password: 123456
+
+#阿里oss配置信息
+  alioss:
+    endpoint:
+    access-key-id:
+    access-key-secret:
+    bucket-name:

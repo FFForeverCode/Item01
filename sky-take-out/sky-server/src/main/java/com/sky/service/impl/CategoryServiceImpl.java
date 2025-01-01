@@ -30,15 +30,18 @@ public class CategoryServiceImpl implements CategoryService {
      * 新增分类
      * @param categoryDTO
      */
+    //todo:
     @Override
     public void insertCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
         BeanUtils.copyProperties(categoryDTO,category);
         category.setStatus(0);
-        category.setUpdateTime(LocalDateTime.now());
-        category.setCreateTime(LocalDateTime.now());
-        category.setCreateUser(BaseContext.getCurrentId());
-        category.setUpdateUser(BaseContext.getCurrentId());
+        //填充更新时间，更新人代码重复冗余,可以采用AOP面向切面的技术将冗余代码与业务代码分离.
+        //TODO:注解+AOP 类似日志Demo
+//        category.setUpdateTime(LocalDateTime.now());
+//        category.setCreateTime(LocalDateTime.now());
+//        category.setCreateUser(BaseContext.getCurrentId());
+//        category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.insertCategory(category);
     }
 
@@ -56,16 +59,21 @@ public class CategoryServiceImpl implements CategoryService {
         return new PageResult(total,result);
     }
 
+    //todo:
     @Override
     public void modify(CategoryDTO categoryDTO) {
         Category category = new Category();
         BeanUtils.copyProperties(categoryDTO,category);
+        //更新时间、更新操作人的id aop实现
         categoryMapper.modify(category);
     }
 
     @Override
-    public void UseOrBan(int status, Long id) {
-        categoryMapper.UseOrBan(status,id);
+    public void UseOrBan(int status,Long id) {
+        Category category = new Category();
+        category.setStatus(status);
+        category.setId(id);
+        categoryMapper.UseOrBan(category);
     }
 
     @Override

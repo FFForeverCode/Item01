@@ -39,3 +39,10 @@ sky:
     #前端传过来参数名为token的数据,也就是JWT令牌.
     #所以接口文档测试时,全局参数需要设置名字为token与之对应
     admin-token-name: token
+
+  #阿里OSS配置
+  alioss:
+    endpoint: ${sky.alioss.endpoint}
+    access-key-id: ${sky.alioss.access-key-id}
+    access-key-secret: ${sky.alioss.access-key-secret}
+    bucket-name: ${sky.alioss.bucket-name}

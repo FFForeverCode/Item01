@@ -19,7 +19,7 @@ public interface CategoryService {
 
     void modify(CategoryDTO categoryDTO);
 
-    void UseOrBan(int status, Long id);
+    void UseOrBan(int status,Long id);
 
     void deleteCategory(Long id);
 
