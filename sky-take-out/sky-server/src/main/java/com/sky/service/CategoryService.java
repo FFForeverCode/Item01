@@ -2,26 +2,48 @@ package com.sky.service;
 
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
+import com.sky.entity.Category;
 import com.sky.result.PageResult;
+import java.util.List;
 
-/**
- * @author ForeverCode
- * @date 2024/12/26
- */
 public interface CategoryService {
+
     /**
-     * 新增分类菜品
+     * 新增分类
      * @param categoryDTO
      */
-    void insertCategory(CategoryDTO categoryDTO);
+    void save(CategoryDTO categoryDTO);
 
+    /**
+     * 分页查询
+     * @param categoryPageQueryDTO
+     * @return
+     */
     PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO);
 
-    void modify(CategoryDTO categoryDTO);
+    /**
+     * 根据id删除分类
+     * @param id
+     */
+    void deleteById(Long id);
 
-    void UseOrBan(int status,Long id);
+    /**
+     * 修改分类
+     * @param categoryDTO
+     */
+    void update(CategoryDTO categoryDTO);
 
-    void deleteCategory(Long id);
+    /**
+     * 启用、禁用分类
+     * @param status
+     * @param id
+     */
+    void startOrStop(Integer status, Long id);
 
-    PageResult selectByType(int type);
+    /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
+    List<Category> list(Integer type);
 }
