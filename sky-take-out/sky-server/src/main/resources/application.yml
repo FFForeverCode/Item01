@@ -42,6 +42,13 @@ sky:
     #前端传过来参数名为token的数据,也就是JWT令牌.
     #所以接口文档测试时,全局参数需要设置名字为token与之对应
     admin-token-name: token
+    user-secret-key: itheima
+    user-ttl: 7200000000000
+    user-token-name: authentication
+
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}
 
   #阿里OSS配置
   alioss:
