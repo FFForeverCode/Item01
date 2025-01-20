@@ -11,7 +11,15 @@
             <if test="status!=null">AND d.status=#{status}</if>
         </where>
     </select>
-
+<!--    List<Dish>list(Dish dish);-->
+    <select id="list" parameterType="com.sky.entity.Dish" resultType="com.sky.entity.Dish">
+        select* from dish
+        <where>
+            <if test=" categoryId != null">category_id = #{categoryId}</if>
+            <if test="status != null">AND status = 1</if>
+            <if test="id != null">AND id = #{id}</if>
+        </where>
+    </select>
 
 <!--    TODO:使用自增主键 其会自动填充到实体类dish中的名为id的属性中-->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">

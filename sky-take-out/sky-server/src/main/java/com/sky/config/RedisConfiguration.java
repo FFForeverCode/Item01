@@ -1,9 +1,13 @@
 package com.sky.config;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Slf4j
@@ -13,13 +17,23 @@ public class RedisConfiguration {
     @Bean
     public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory){
         log.info("创建Redis的模板对象");
-        RedisTemplate redisTemplate = new RedisTemplate();
-        //设置链接工厂对象
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        //设置Redis key的序列化器
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        //设置value的序列化器 否则会出现二进制
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
-        return redisTemplate;
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+
+        // 设置自定义的 ObjectMapper
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule()); // 注册 Java 8 日期模块
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // 禁用时间戳
+
+        // 使用 GenericJackson2JsonRedisSerializer 作为 Redis 序列化器
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+
+        // 设置 key 和 value 的序列化方式
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
+
+        return template;
     }
 }
