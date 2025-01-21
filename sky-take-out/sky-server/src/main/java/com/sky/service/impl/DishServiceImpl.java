@@ -2,6 +2,7 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.annotation.AutoFill;
+import com.sky.annotation.DeleteCache;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
@@ -19,6 +20,7 @@ import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private SetMealMapper setmealMapper;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     /**
      * 分页查询
@@ -56,6 +61,7 @@ public class DishServiceImpl implements DishService {
      * @param dishDto
      */
     @Override
+    @DeleteCache
     @AutoFill(OperationType.UPDATE)
     public void modifyDish(DishDTO dishDto) {
         Dish dish = new Dish();
@@ -74,6 +80,7 @@ public class DishServiceImpl implements DishService {
      * @param dishDTO
      */
     @Override
+    @DeleteCache
     @Transactional//事务管理，多个表的操作，需要保证数据一致性
     public void saveWithFlavor(DishDTO dishDTO) {
         Dish dish = new Dish();//Dish类中没有口味表
@@ -95,6 +102,7 @@ public class DishServiceImpl implements DishService {
         }
     }
 
+    //TODO:缓存清理
     @Transactional
     @Override
     public void deleteBach(List<Long> ids) {
@@ -124,6 +132,7 @@ public class DishServiceImpl implements DishService {
      * @param status
      * @param id
      */
+    //TODO：缓存清理
     @Override
     public void ManageSale(int status, int id) {
         dishMapper.ManageSale(status,id);

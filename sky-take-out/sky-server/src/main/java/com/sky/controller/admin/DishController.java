@@ -1,5 +1,6 @@
 package com.sky.controller.admin;
 
+import com.sky.annotation.DeleteCache;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.mapper.DishFlavorMapper;
@@ -13,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +30,9 @@ public class DishController {
     private DishMapper dishMapper;
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @GetMapping("/{id}")
