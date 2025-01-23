@@ -9,15 +9,18 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.service.impl.DishServiceImpl;
+import com.sky.utils.DeleteCacheUtil;
 import com.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/dish")//TODO:一定要确定好路径
@@ -26,13 +29,12 @@ import java.util.List;
 public class DishController {
     @Autowired
     private DishService dishService;
-    @Autowired
-    private DishMapper dishMapper;
-    @Autowired
-    private DishFlavorMapper dishFlavorMapper;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private DeleteCacheUtil deleteCacheUtil;
+
+    private static String key = "dish_";
+
 
 
     @GetMapping("/{id}")
@@ -61,6 +63,7 @@ public class DishController {
     public Result<String>modifyDish(@RequestBody DishDTO dishDto){
         log.info("修改菜品{}",dishDto);
         //代码
+        deleteCacheUtil.deleteAll(key);
         dishService.modifyDish(dishDto);
         return Result.success();
     }
@@ -71,6 +74,7 @@ public class DishController {
      */
     @SuppressWarnings("all")
     @PostMapping
+    @DeleteCache
     @ApiOperation("新增菜品")
     public Result save(@RequestBody DishDTO dishDTO){
         log.info("新增菜品{}",dishDTO);
@@ -83,6 +87,9 @@ public class DishController {
     public Result delete(@RequestParam List<Long> ids){
         log.info("菜品的批量删除{}",ids);
         dishService.deleteBach(ids);
+        //清理缓存
+        //将所有的缓存清理掉
+        deleteCacheUtil.deleteAll(key);
         return Result.success();
     }
 
@@ -95,6 +102,8 @@ public class DishController {
     @PostMapping("/status/{status}")
     public Result ManageSale(@PathVariable int status,int id){
         log.info("管理菜品是否出售,{}",status);
+        String key = "dish_";
+        deleteCacheUtil.deleteAll(key);
         dishService.ManageSale(status,id);
         return Result.success();
 

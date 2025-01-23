@@ -20,7 +20,7 @@ public class RedisConfiguration {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
 
-        // 设置自定义的 ObjectMapper
+        // 设置自定义的 ObjectMapper 处理LocalTime序列化问题
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); // 注册 Java 8 日期模块
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // 禁用时间戳

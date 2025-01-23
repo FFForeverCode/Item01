@@ -39,9 +39,6 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private SetMealMapper setmealMapper;
 
-    @Autowired
-    RedisTemplate redisTemplate;
-
     /**
      * 分页查询
      * @param dishPageQueryDTO
@@ -61,7 +58,6 @@ public class DishServiceImpl implements DishService {
      * @param dishDto
      */
     @Override
-    @DeleteCache
     @AutoFill(OperationType.UPDATE)
     public void modifyDish(DishDTO dishDto) {
         Dish dish = new Dish();
@@ -80,7 +76,6 @@ public class DishServiceImpl implements DishService {
      * @param dishDTO
      */
     @Override
-    @DeleteCache
     @Transactional//事务管理，多个表的操作，需要保证数据一致性
     public void saveWithFlavor(DishDTO dishDTO) {
         Dish dish = new Dish();//Dish类中没有口味表
